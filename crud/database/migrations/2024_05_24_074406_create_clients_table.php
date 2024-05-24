@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
+            $table->string('email');
             $table->string('cpf_cnpj');
             $table->date('data_nascimento');
             $table->string('foto')->nullable();
@@ -30,3 +31,4 @@ return new class extends Migration
         Schema::dropIfExists('clients');
     }
 };
+
