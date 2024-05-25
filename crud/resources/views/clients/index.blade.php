@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
 </head>
+
 <body>
     <h1>Lista de Clientes</h1>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <a href="{{ route('clients.create') }}" class="btn-add">Adicionar Cliente</a>
     <table>
         <thead>
@@ -23,7 +30,7 @@
             @foreach ($clients as $client)
                 <tr>
                     <td>{{ $client->nome }}</td>
-                    <td>{{ $client->nome_social}}</td>
+                    <td>{{ $client->nome_social }}</td>
                     <td>{{ $client->cpf_cnpj }}</td>
                     <td>{{ $client->email }}</td>
                     <td>{{ $client->data_nascimento }}</td>
@@ -41,4 +48,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

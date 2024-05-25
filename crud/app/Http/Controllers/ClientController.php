@@ -90,7 +90,7 @@ public function destroy(Client $client)
 
         $client->update($data);
 
-        return redirect()->route('clients.index');
+        return redirect()->route('clients.index')->with('success', 'Cliente atualizado com sucesso!');
     }
     
 };
