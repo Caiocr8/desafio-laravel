@@ -10,5 +10,5 @@ Route::namespace('App\Http\Controllers')->group(function () {
     
 
     Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
-    Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    Route::delete('/clients/{client}', [ClientController::class, 'delete'])->name('clients.delete');
 });

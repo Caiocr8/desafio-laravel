@@ -6,7 +6,6 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 class ClientController extends Controller
 {
@@ -31,8 +30,6 @@ class ClientController extends Controller
                 $validatedData['foto'] = $this->uploadFile($request->file('foto'));
             }
 
-            $validatedData['data_nascimento'] = Carbon::createFromFormat('d/m/Y', $request->input('data_nascimento'))->format('Y-m-d');
-
             Client::create($validatedData);
         });
 
@@ -42,7 +39,6 @@ class ClientController extends Controller
     public function edit($id)
     {
         $client = Client::findOrFail($id);
-        $client->data_nascimento = Carbon::parse($client->data_nascimento)->format('d/m/Y');
         $fields = $this->getFields();
         return view('clients.edit', compact('client', 'fields'));
     }
@@ -55,8 +51,6 @@ class ClientController extends Controller
             if ($request->hasFile('foto')) {
                 $validatedData['foto'] = $this->uploadFile($request->file('foto'), $client->foto);
             }
-
-            $validatedData['data_nascimento'] = Carbon::createFromFormat('d/m/Y', $request->input('data_nascimento'))->format('Y-m-d');
 
             $client->update($validatedData);
         });
@@ -76,22 +70,14 @@ class ClientController extends Controller
 
     private function validateClient(Request $request)
     {
-        $rules = [
+        return $request->validate([
             'nome' => 'required',
             'email' => 'required|email',
             'cpf_cnpj' => 'required',
-            'data_nascimento' => 'required|date_format:d/m/Y',
+            'data_nascimento' => 'required|date',
             'nome_social' => 'required',
             'foto' => 'nullable|file',
-        ];
-
-        if ($request->input('document_type') == 'cpf') {
-            $rules['cpf_cnpj'] = 'required|cpf';
-        } else {
-            $rules['cpf_cnpj'] = 'required|cnpj';
-        }
-
-        return $request->validate($rules);
+        ]);
     }
 
     private function uploadFile($file, $oldFile = null)
