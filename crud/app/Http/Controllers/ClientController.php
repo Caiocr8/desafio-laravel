@@ -23,17 +23,25 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $this->validateClient($request);
+        $client = Client::whereEmail($request->input('email'))->first();
 
-        DB::transaction(function () use ($validatedData, $request) {
-            if ($request->hasFile('foto')) {
-                $validatedData['foto'] = $this->uploadFile($request->file('foto'));
-            }
+        if ($client) {
+            // Client with same email address already exists
+            // Update the existing client or display an error message
+            return redirect()->back()->withErrors(['email' => 'The email address is already in use.']);
+        } else {
+            $validatedData = $this->validateClient($request);
 
-            Client::create($validatedData);
-        });
+            DB::transaction(function () use ($validatedData, $request) {
+                if ($request->hasFile('foto')) {
+                    $validatedData['foto'] = $this->uploadFile($request->file('foto'));
+                }
 
-        return redirect()->route('clients.index')->with('success', 'Cliente cadastrado com sucesso!');
+                $client = Client::create($validatedData);
+            });
+
+            return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+        }
     }
 
     public function edit($id)

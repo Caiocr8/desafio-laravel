@@ -19,6 +19,14 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="nome_social" class="block text-gray-700 font-bold mb-2">Nome Social:</label>
+                        <input id="nome_social" type="text" class="form-control @error('nome_social') border-red-500 @enderror" name="nome_social" value="{{ $client->nome_social }}" required autocomplete="nome_social">
+                        @error('nome_social')
+                            <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
                         <label for="email" class="block text-gray-700 font-bold mb-2">E-mail:</label>
                         <input id="email" type="email" class="form-control @error('email') border-red-500 @enderror" name="email" value="{{ $client->email }}" required autocomplete="email">
                         @error('email')
