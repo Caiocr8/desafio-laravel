@@ -6,35 +6,37 @@ use Illuminate\Contracts\Validation\Rule;
 
 class CPFRule implements Rule
 {
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
     public function passes($attribute, $value)
     {
-        $value = preg_replace('/[^0-9]/', '', $value);
+        // Remove all non-numeric characters
+        $cpf = preg_replace('/[^0-9]/', '', $value);
 
-        if (strlen($value) === 11) {
-            // CPF validation logic
-        } elseif (strlen($value) === 14) {
-            // CNPJ validation logic
-        } else {
+        // Check if length is 11
+        if (strlen($cpf) != 11) {
             return false;
+        }
+
+        // Check if all digits are the same
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        // Validate CPF using algorithm
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
         }
 
         return true;
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
     public function message()
     {
-        return 'Não é um CPF válido!.';
+        return 'Não é um CPF válido!';
     }
 }

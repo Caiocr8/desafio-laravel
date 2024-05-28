@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <form action="{{ route('clients.update', ['id' => $client->id]) }}" method="POST" enctype="multipart/form-data" class="container p-4 bg-white rounded-md shadow-md">
     @csrf
     @method('PUT')
@@ -15,7 +14,7 @@
 
     <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2" for="email">Email:</label>
-        <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="email" name="email">
+        <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="email" name="email" value="{{ $client->email }}">
     </div>
 
     <div class="mb-4 ">
@@ -25,7 +24,7 @@
 
     <div class="mb-4 ">
         <label class="block text-gray-700 font-bold mb-2" for="cpf_or_cnpj">CPF or CNPJ:</label>
-        <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="text" name="cpf_or_cnpj" value="{{ $client->cpf_or_cnpj }}">
+        <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="text" name="cpf_or_cnpj" value="{{ $client->cpf_or_cnpj }}" readonly>
             @error('cpf_or_cnpj')
                 <p class="text-red-500">{{ $message }}</p>
             @enderror
@@ -33,6 +32,7 @@
 
     <div class="mb-4 ">
         <label class="block text-gray-700 font-bold mb-2" for="photo">Photo:</label>
+        <img src="{{ asset('storage/' . $client->photo) }}" class="w-16 h-16 mb-4 rounded-full mr-4">
         <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="file" name="photo">
     </div>
 
@@ -46,5 +46,4 @@
         </a>
         <button class="bg-[#ffffff] hover:bg-[#f37721] hover:text-[#ffffff] text-[#f37721]  font-bold py-2 px-4 rounded-2xl" type="submit">Atualizar</button>
     </div>
-    
 </form>

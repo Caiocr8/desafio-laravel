@@ -29,6 +29,7 @@
             <option value="cnpj">CNPJ</option>
         </select>
     </div>
+    <div class="mb-4">
         <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="text" name="cpf_or_cnpj" id="cpf_or_cnpj">
         @error('cpf_or_cnpj')
             <p class="text-red-500">{{ $message }}</p>
@@ -45,10 +46,28 @@
     </div>
 
     <div class="flex justify-between">
-        <a href="{{ route('clients.index') }}" class="bg-[#ffffff] hover:bg-[#f37721] hover:text-[#ffffff] text-[#f37721]  font-bold py-2 px-4 rounded-2xl">
+        <a href="{{ route('clients.index') }}" class="bg-[#ffffff] hover:bg-[#f37721] hover:text-[#ffffff] text-[#f37721] font-bold py-2 px-4 rounded-2xl">
             Voltar
         </a>
-        <button class="bg-[#ffffff] hover:bg-[#f37721] hover:text-[#ffffff] text-[#f37721]  font-bold py-2 px-4 rounded-2xl" type="submit">Create</button>   
+        <button class="bg-[#ffffff] hover:bg-[#f37721] hover:text-[#ffffff] text-[#f37721] font-bold py-2 px-4 rounded-2xl" type="submit">Create</button>   
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function applyMask() {
+                var inputType = $('#input_type').val();
+                var cpfCnpjInput = $('#cpf_or_cnpj');
+                cpfCnpjInput.unmask();
+                if (inputType === 'cpf') {
+                    cpfCnpjInput.mask('000.000.000-00');
+                } else if (inputType === 'cnpj') {
+                    cpfCnpjInput.mask('00.000.000/0000-00');
+                }
+            }
+
+            $('#input_type').change(applyMask);
+            applyMask();
+        });
+    </script>
 </form>
