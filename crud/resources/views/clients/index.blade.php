@@ -2,53 +2,36 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12">
-    <h1 class="text-3xl font-bold text-center mb-4">Lista de Clientes</h1>
-    @if (session('success'))
-        <div class="alert alert-success mb-4">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+<div class="flex flex-col justify-center p-20">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Lista de Clientes</h1>
+        <a href="{{ route('clients.create') }}">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Adicionar Cliente
             </button>
-        </div>
-    @endif
-    <a href="{{ route('clients.create') }}" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Adicionar Cliente</a>
-    <table class="table-auto w-full mb-4">
-        <thead>
-            <tr>
-                <th class="px-4 py-2">Nome</th>
-                <th class="px-4 py-2">Nome Social</th>
-                <th class="px-4 py-2">CPF/CNPJ</th>
-                <th class="px-4 py-2">Email</th>
-                <th class="px-4 py-2">Data de Nascimento</th>
-                <th class="px-4 py-2">Foto</th>
-                <th class="px-4 py-2">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($clients as $client)
-                <tr>
-                    <td class="px-4 py-2">{{ $client->nome }}</td>
-                    <td class="px-4 py-2">{{ $client->nome_social }}</td>
-                    <td class="px-4 py-2">{{ $client->cpf_cnpj }}</td>
-                    <td class="px-4 py-2">{{ $client->email }}</td>
-                    <td class="px-4 py-2">{{ $client->data_nascimento }}</td>
-                    <td class="px-4 py-2"><img src="{{ asset($client->foto) }}" alt="Foto do cliente" width="100" class="rounded"></td>
-                    <td class="px-4 py-2">
-                        <a href="{{ route('clients.edit', $client) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</a>
-                        <form action="{{ route('clients.delete', $client) }}" method="post" class="d-inline">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"></script>
-</div>    
-
+        </a>
+    </div>
     
-
+    <div class="bg-gray-800 p-4 rounded-lg shadow-md">
+        <ul class="list-none mb-4">
+            @foreach($clients as $client)
+                <li class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 p-4 bg-gray-700 rounded-lg shadow-sm">
+                    <div class="flex items-center">
+                        <img src="{{ asset('storage/' . $client->photo) }}" class="w-16 h-16 rounded-full mr-4">
+                        <span class="text-lg text-white">{{ $client->name }} ({{ $client->birth_date }})</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center mt-2 sm:mt-0">
+                        <a href="{{ route('clients.show', $client->id) }}" class="text-blue-400 hover:text-blue-600 sm:ml-2">View</a>
+                        <a href="{{ route('clients.edit', $client->id) }}" class="text-yellow-400 hover:text-yellow-600 sm:ml-4 mt-2 sm:mt-0">Edit</a>
+                        <form action="{{ route('clients.destroy', $client->id) }}" method="post" class="sm:ml-4 mt-2 sm:mt-0">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+</div>
 

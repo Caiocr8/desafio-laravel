@@ -1,3 +1,156 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #e0e0e0; /* Texto em um tom mais claro para contraste */
+    background-color: #121212; /* Fundo mais escuro */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    color: #e0e0e0; /* Manter o contraste */
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Container */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Responsive Breakpoints */
+
+/* Small screens (up to 640px) */
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+}
+
+/* Medium screens (641px to 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .container {
+        padding: 2rem;
+    }
+}
+
+/* Large screens (1025px and up) */
+@media (min-width: 1025px) {
+    .container {
+        padding: 3rem;
+    }
+}
+
+/* Utility Classes */
+
+.text-lg {
+    font-size: 1.25rem;
+}
+
+.text-xl {
+    font-size: 1.5rem;
+}
+
+.text-2xl {
+    font-size: 1.75rem;
+}
+
+.text-3xl {
+    font-size: 2rem;
+}
+
+.bg-primary {
+    background-color: #3498db;
+}
+
+.bg-secondary {
+    background-color: #f1c40f;
+}
+
+.text-primary {
+    color: #3498db;
+}
+
+.text-secondary {
+    color: #f1c40f;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.m-2 {
+    margin: 0.5rem;
+}
+
+.mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.rounded {
+    border-radius: 0.25rem;
+}
+
+.shadow {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+
+.button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.button:active {
+    background-color: #2271b1;
+}

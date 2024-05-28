@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Client;
 use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
@@ -17,96 +16,87 @@ class ClientController extends Controller
 
     public function create()
     {
-        $fields = $this->getFields();
-        return view('clients.create', compact('fields'));
+        return view('clients.create');
     }
 
     public function store(Request $request)
     {
-        $client = Client::whereEmail($request->input('email'))->first();
+        $request->validate([
+            'name' => 'required|string',
+            'birth_date' => 'required|date',
+            'cpf_or_cnpj' => 'required|string',
+            'photo' => 'required|image',
+            'social_name' => 'required|string',
+        ]);
+    
+        $photo = $request->file('photo');
+        $photoPath = $photo->store('images', 'public');
+    
+        $client = new Client();
+        $client->name = $request->input('name');
+        $client->birth_date = $request->input('birth_date');
+        $client->cpf_or_cnpj = $request->input('cpf_or_cnpj');
+        $client->photo = $photoPath;
+        $client->social_name = $request->input('social_name');
+        $client->created_at = now();
+        $client->updated_at = now();
+        $client->save();
+    
+        return redirect()->route('clients.index');
+    }
+    
 
-        if ($client) {
-            // Client with same email address already exists
-            // Update the existing client or display an error message
-            return redirect()->back()->withErrors(['email' => 'The email address is already in use.']);
-        } else {
-            $validatedData = $this->validateClient($request);
-
-            DB::transaction(function () use ($validatedData, $request) {
-                if ($request->hasFile('foto')) {
-                    $validatedData['foto'] = $this->uploadFile($request->file('foto'));
-                }
-
-                $client = Client::create($validatedData);
-            });
-
-            return redirect()->route('clients.index')->with('success', 'Client created successfully.');
-        }
+    public function show($id)
+    {
+        $client = Client::findOrFail($id);
+        return view('clients.show', compact('client'));
     }
 
     public function edit($id)
     {
         $client = Client::findOrFail($id);
-        $fields = $this->getFields();
-        return view('clients.edit', compact('client', 'fields'));
+        return view('clients.edit', compact('client'));
     }
 
-    public function update(Request $request, Client $client)
+    public function update(Request $request, $id)
     {
-        $validatedData = $this->validateClient($request);
+        $client = Client::findOrFail($id);
 
-        DB::transaction(function () use ($validatedData, $request, $client) {
-            if ($request->hasFile('foto')) {
-                $validatedData['foto'] = $this->uploadFile($request->file('foto'), $client->foto);
+        $request->validate([
+            'name' => 'required|string',
+            'birth_date' => 'required|date',
+            'cpf_or_cnpj' => 'required|string',
+            'photo' => 'nullable|image',
+            'social_name' => 'required|string',
+        ]);
+
+        if ($request->hasFile('photo')) {
+            if ($client->photo) {
+                Storage::disk('public')->delete($client->photo);
             }
+            $photoPath = $request->file('photo')->store('images', 'public');
+            $client->photo = $photoPath;
+        }
 
-            $client->update($validatedData);
-        });
+        $client->name = $request->input('name');
+        $client->birth_date = $request->input('birth_date');
+        $client->cpf_or_cnpj = $request->input('cpf_or_cnpj');
+        $client->social_name = $request->input('social_name');
+        $client->updated_at = now();
+        $client->save();
 
-        return redirect()->route('clients.index')->with('success', 'Cliente atualizado com sucesso!');
+        return redirect()->route('clients.index');
     }
 
-    public function delete(Client $client)
+    public function destroy($id)
     {
-        if ($client->foto) {
-            Storage::delete($client->foto);
+        $client = Client::findOrFail($id);
+
+        if ($client->photo) {
+            Storage::disk('public')->delete($client->photo);
         }
 
         $client->delete();
-        return redirect()->route('clients.index')->with('success', 'Cliente deletado com sucesso!');
-    }
-
-    private function validateClient(Request $request)
-    {
-        return $request->validate([
-            'nome' => 'required',
-            'email' => 'required|email',
-            'cpf_cnpj' => 'required',
-            'data_nascimento' => 'required|date',
-            'nome_social' => 'required',
-            'foto' => 'nullable|file',
-        ]);
-    }
-
-    private function uploadFile($file, $oldFile = null)
-    {
-        if ($oldFile) {
-            Storage::delete($oldFile);
-        }
-
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        return $file->storeAs('images/clients', $filename, 'public');
-    }
-
-    private function getFields()
-    {
-        return [
-            ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
-            ['name' => 'data_nascimento', 'label' => 'Data de Nascimento', 'type' => 'date', 'required' => true],
-            ['name' => 'cpf_cnpj', 'label' => 'CPF/CNPJ', 'type' => 'text', 'required' => true],
-            ['name' => 'email', 'label' => 'Email', 'type' => 'email', 'required' => true],
-            ['name' => 'foto', 'label' => 'Foto', 'type' => 'file', 'required' => false],
-            ['name' => 'nome_social', 'label' => 'Nome Social', 'type' => 'text', 'required' => false],
-        ];
+        return redirect()->route('clients.index');
     }
 }
