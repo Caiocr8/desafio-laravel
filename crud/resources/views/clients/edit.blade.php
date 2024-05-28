@@ -13,6 +13,11 @@
         <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="text" name="name" value="{{ $client->name }}">
     </div>
 
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="email">Email:</label>
+        <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="email" name="email">
+    </div>
+
     <div class="mb-4 ">
         <label class="block text-gray-700 font-bold mb-2" for="birth_date">Birth Date:</label>
         <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="date" name="birth_date" value="{{ $client->birth_date }}">
@@ -21,6 +26,9 @@
     <div class="mb-4 ">
         <label class="block text-gray-700 font-bold mb-2" for="cpf_or_cnpj">CPF or CNPJ:</label>
         <input class="w-full px-3 py-2 border text-[#f37721] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f37721]" type="text" name="cpf_or_cnpj" value="{{ $client->cpf_or_cnpj }}">
+            @error('cpf_or_cnpj')
+                <p class="text-red-500">{{ $message }}</p>
+            @enderror
     </div>
 
     <div class="mb-4 ">

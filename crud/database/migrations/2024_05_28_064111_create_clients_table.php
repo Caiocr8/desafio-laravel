@@ -12,9 +12,10 @@ class CreateClientsTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('birth_date');
-            $table->string('cpf_or_cnpj');
+            $table->string('cpf_or_cnpj')->unique();
             $table->string('photo');
             $table->string('social_name');
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }

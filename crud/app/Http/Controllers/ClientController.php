@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use App\Rules\CPFRule; 
+use App\Rules\CNPJRule; 
 
 class ClientController extends Controller
 {
@@ -15,36 +18,35 @@ class ClientController extends Controller
     }
 
     public function create()
-    {
+    {   
+        
         return view('clients.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'birth_date' => 'required|date',
-            'cpf_or_cnpj' => 'required|string',
-            'photo' => 'required|image',
-            'social_name' => 'required|string',
+            'cpf_or_cnpj' => ['required', 'string', 'max:18', new CPFRule, new CNPJRule],
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'social_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:clients',
         ]);
-    
-        $photo = $request->file('photo');
-        $photoPath = $photo->store('images', 'public');
-    
+
+        $photoPath = $request->file('photo')->store('images', 'public');
+
         $client = new Client();
         $client->name = $request->input('name');
         $client->birth_date = $request->input('birth_date');
         $client->cpf_or_cnpj = $request->input('cpf_or_cnpj');
         $client->photo = $photoPath;
         $client->social_name = $request->input('social_name');
-        $client->created_at = now();
-        $client->updated_at = now();
+        $client->email = $request->input('email');
         $client->save();
-    
+
         return redirect()->route('clients.index');
     }
-    
 
     public function show($id)
     {
@@ -63,11 +65,12 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'birth_date' => 'required|date',
-            'cpf_or_cnpj' => 'required|string',
-            'photo' => 'nullable|image',
-            'social_name' => 'required|string',
+            'cpf_or_cnpj' => ['required', 'string', 'max:18', new \App\Rules\CPFRule, new \App\Rules\CNPJRule],
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'social_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:clients,email,'.$client->id,
         ]);
 
         if ($request->hasFile('photo')) {
@@ -82,7 +85,7 @@ class ClientController extends Controller
         $client->birth_date = $request->input('birth_date');
         $client->cpf_or_cnpj = $request->input('cpf_or_cnpj');
         $client->social_name = $request->input('social_name');
-        $client->updated_at = now();
+        $client->email = $request->input('email');
         $client->save();
 
         return redirect()->route('clients.index');
