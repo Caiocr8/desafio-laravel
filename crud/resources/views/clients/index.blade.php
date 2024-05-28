@@ -2,31 +2,31 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="flex flex-col justify-center p-20">
+<div class="flex flex-col justify-center container p-20">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Lista de Clientes</h1>
+        <h1 class="text-3xl text-[#f37721] font-bold">Lista de Clientes</h1>
         <a href="{{ route('clients.create') }}">
-            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <button class="bg-[#ffffff] hover:bg-[#f37721] shadow-md hover:shadow-[#f37721] hover:text-[#ffffff] text-[#f37721] py-4 px-6 rounded-2xl">
                 Adicionar Cliente
             </button>
         </a>
     </div>
     
-    <div class="bg-gray-800 p-4 rounded-lg shadow-md">
+    <div class="bg-[#FFFFFF] p-4  rounded-lg shadow-md ">
         <ul class="list-none mb-4">
             @foreach($clients as $client)
-                <li class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 p-4 bg-gray-700 rounded-lg shadow-sm">
+                <li class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 p-4 bg-[#F37A26] rounded-lg shadow-sm">
                     <div class="flex items-center">
                         <img src="{{ asset('storage/' . $client->photo) }}" class="w-16 h-16 rounded-full mr-4">
-                        <span class="text-lg text-white">{{ $client->name }} ({{ $client->birth_date }})</span>
+                        <span class="text-lg text-white">{{ $client->name }} ({{ \Carbon\Carbon::parse($client->birth_date)->format('d/m/Y') }})</span>
                     </div>
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center mt-2 sm:mt-0">
-                        <a href="{{ route('clients.show', $client->id) }}" class="text-blue-400 hover:text-blue-600 sm:ml-2">View</a>
-                        <a href="{{ route('clients.edit', $client->id) }}" class="text-yellow-400 hover:text-yellow-600 sm:ml-4 mt-2 sm:mt-0">Edit</a>
-                        <form action="{{ route('clients.destroy', $client->id) }}" method="post" class="sm:ml-4 mt-2 sm:mt-0">
+                    <div class="flex  items-start mt-2 gap-5">
+                        <a href="{{ route('clients.show', $client->id) }}" class="hover:bg-blue-600 bg-[#ffffff] hover:text-[#ffffff] text-[#f37721] sm:ml-2  font-bold py-2 px-4 rounded">View</a>
+                        <a href="{{ route('clients.edit', $client->id) }}" class="hover:bg-yellow-400 bg-[#ffffff] text-[#f37721] hover:text-white font-bold py-2 px-4 rounded">Edit</a>
+                        <form action="{{ route('clients.destroy', $client->id) }}" method="post" class="">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Delete</button>
+                            <button type="submit" class="hover:bg-red-600 bg-[#ffffff] text-[#F37A26] hover:text-white font-bold py-2 px-4 rounded">Delete</button>
                         </form>
                     </div>
                 </li>
