@@ -1,11 +1,16 @@
 Desafio Laravel: Guia de Inicialização
 Este projeto é um CRUD básico, demonstrando as operações essenciais em um aplicativo web usando Laravel:
 
-Create (Criar): Adicionar novos registros ao banco de dados.
+Create (Criar): Adicionar novos registros ao banco de dados. 
+
 Read (Ler): Visualizar registros existentes.
+
 Update (Atualizar): Editar registros existentes.
+
 Delete (Excluir): Remover registros do banco de dados.
-Pré-requisitos
+
+
+Pré-requisitos: 
 Certifique-se de ter as seguintes ferramentas instaladas em sua máquina antes de iniciar o projeto:
 
 Git
