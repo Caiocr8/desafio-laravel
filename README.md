@@ -1,19 +1,38 @@
-CRUD : GUIA DE INICIALIZAÇÃO:
+Desafio Laravel:
+
+Guia de inicialização:
 
 
-git clone https://github.com/Caiocr8/desafio-laravel.git
+  - git clone https://github.com/Caiocr8/desafio-laravel.git
+  
+  - cd desafio-laravel
+  
+  - cd crud
+  
+  - cp .env.example .env
+  
+  - cd ..
+  
+  - sudo docker-compose up -d --build
+  
+  - sudo docker exec setup-php composer install
 
-cd desafio-laravel
+  - sudo docker exec setup-php php artisan key:generate
+  
+  - sudo docker exec setup-php php artisan storage:link
+  
+  - cd ./crud
+  
+  - npm install
+  
+  - npm run dev
 
-sudo docker-compose up -d --build
+Este projeto é um CRUD básico, demonstrando as operações essenciais em um aplicativo web usando Laravel:
 
-sudo docker exec setup-php composer install
+Create (Criar): Adicionar novos registros ao banco de dados.
+Read (Ler): Visualizar registros existentes.
+Update (Atualizar): Editar registros existentes.
+Delete (Excluir): Remover registros do banco de dados.
 
-sudo docker exec setup-php php artisan storage:link
 
-cd ./crud
-
-npm install
-
-npm run dev
 
